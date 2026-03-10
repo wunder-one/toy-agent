@@ -8,7 +8,7 @@ def get_files_info(working_directory, directory="."):
         # Validates that target directory falls within the working directory
         if os.path.commonpath([working_dir_abs, target_dir]) != working_dir_abs:
             return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
-        if os.path.isdir(target_dir) == False:
+        if not os.path.isdir(target_dir):
             return f'Error: "{directory}" is not a directory'
 
         # Build file info text block

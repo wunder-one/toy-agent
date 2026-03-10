@@ -11,7 +11,7 @@ def get_file_content(working_directory, file_path):
         # print(f"Full working dir -> {abs_working_dir}")
         if os.path.commonpath([abs_working_dir, abs_file_path]) != abs_working_dir:
             return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory'
-        if os.path.isfile(abs_file_path) == False:
+        if not os.path.isfile(abs_file_path):
             return f'Error: "{file_path}" is not a file'
 
         # Open and read file. Truncate if too long.

@@ -4,31 +4,37 @@ def test():
     result = get_files_info("calculator", ".")
     print('get_files_info("calculator", ".")')
     print(result)
+    print('------ END OF TEST ------')
     print('')
 
     result = get_files_info("calculator", "pkg")
     print('get_files_info("calculator", "pkg")')
     print(result)
+    print('------ END OF TEST ------')
     print('')
 
     result = get_files_info("calculator", "/bin")
     print('get_files_info("calculator", "/bin")')
     print(result)
+    print('------ END OF TEST ------')
     print('')
 
     result = get_files_info("calculator", "../")
     print('get_files_info("calculator", "../")')
     print(result)
+    print('------ END OF TEST ------')
     print('')
 
     result = get_files_info("calculator", "lorem.txt")
     print('get_files_info("calculator", "lorem.txt")')
     print(result)
+    print('------ END OF TEST ------')
     print('')
 
     result = get_files_info("calculator", "fudge")
     print('get_files_info("calculator", "fudge")')
     print(result)
+    print('------ END OF TEST ------')
     print('')
 
 if __name__ == "__main__":

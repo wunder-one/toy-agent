@@ -10,7 +10,7 @@ def write_file(working_directory, file_path, content):
         # print(f"Full working dir -> {abs_working_dir}")
         if os.path.commonpath([abs_working_dir, abs_file_path]) != abs_working_dir:
             return f'Error: Cannot write to "{file_path}" as it is outside the permitted working directory'
-        if os.path.isdir(abs_file_path) == True:
+        if os.path.isdir(abs_file_path):
             return f'Error: Cannot write to "{file_path}" as it is a directory'
 
         abs_parent_dir = os.path.dirname(abs_file_path)
@@ -23,5 +23,5 @@ def write_file(working_directory, file_path, content):
 
     
     except Exception as e:
-        return f"Error: reading file: {e}"
+        return f"Error: writing to file: {e}"
 
