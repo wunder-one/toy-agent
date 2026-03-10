@@ -7,8 +7,8 @@ def get_file_content(working_directory, file_path):
         abs_file_path = os.path.normpath(os.path.join(abs_working_dir, file_path))
 
         # Validates that target directory falls within the working directory
-        print(f"Full file path -> {abs_file_path}")
-        print(f"Full working dir -> {abs_working_dir}")
+        # print(f"Full file path -> {abs_file_path}")
+        # print(f"Full working dir -> {abs_working_dir}")
         if os.path.commonpath([abs_working_dir, abs_file_path]) != abs_working_dir:
             return f'Error: Cannot list "{file_path}" as it is outside the permitted working directory'
         if os.path.isfile(abs_file_path) == False:
@@ -25,4 +25,4 @@ def get_file_content(working_directory, file_path):
         return content
 
     except Exception as e:
-        return f"Error reading file: {e}"
+        return f"Error: reading file: {e}"
