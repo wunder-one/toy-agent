@@ -2,6 +2,21 @@ from pathlib import os
 from google.genai import types
 from config import MAX_CHARS
 
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description=f"Fetch contents of specified file. Returned data is limited to {MAX_CHARS} characters to save on tokens",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        required=["file_path"],
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="File path to file relative to the working directory. If the file is at the root of the working directory only the file name needs to be given",
+            ),
+        },
+    ),
+)
+
 def get_file_content(working_directory, file_path):
     try:
         abs_working_dir = os.path.abspath(working_directory)

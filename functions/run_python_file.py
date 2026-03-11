@@ -1,5 +1,29 @@
 from pathlib import os
+from google.genai import types
 import subprocess
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Execute specified python file",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        required=["file_path"],
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="File path to file relative to the working directory. If the file is at the root of the working directory only the file name needs to be given",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="Array of arguments to be used when calling the python file",
+                items=types.Schema(
+                    type=types.Type.STRING,
+                    description="Individual argument",
+                )
+            ),
+        },
+    ),
+)
 
 def run_python_file(working_directory, file_path, args=None):
     try:
