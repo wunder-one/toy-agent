@@ -21,5 +21,3 @@ All paths you provide should be relative to the working directory. You do not ne
 available_functions = types.Tool(
     function_declarations=[schema_get_files_info, schema_get_file_content, schema_write_file, schema_run_python_file],
 )
-
-# function_declarations=[schema_get_files_info, schema_get_file_content, schema_write_file, schema_run_python_file],

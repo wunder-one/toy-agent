@@ -1,3 +1,5 @@
+import math
+
 class Calculator:
     def __init__(self):
         self.operators = {
@@ -5,40 +7,67 @@ class Calculator:
             "-": lambda a, b: a - b,
             "*": lambda a, b: a * b,
             "/": lambda a, b: a / b,
+            "**": lambda a, b: a ** b,
+            "sqrt": lambda a: math.sqrt(a),
         }
         self.precedence = {
             "+": 1,
             "-": 1,
             "*": 2,
             "/": 2,
+            "**": 3,
+            "sqrt": 4,
         }
 
     def evaluate(self, expression):
         if not expression or expression.isspace():
             return None
-        tokens = expression.strip().split()
+        tokens = self._tokenize(expression)
         return self._evaluate_infix(tokens)
+
+    def _tokenize(self, expression):
+        # This simple tokenizer assumes space-separated tokens.
+        # For more robust parsing, a more sophisticated tokenizer would be needed.
+        return expression.replace('(', ' ( ').replace(')', ' ) ').split()
 
     def _evaluate_infix(self, tokens):
         values = []
         operators = []
 
-        for token in tokens:
-            if token in self.operators:
-                while (
-                    operators
-                    and operators[-1] in self.operators
-                    and self.precedence[operators[-1]] >= self.precedence[token]
-                ):
-                    self._apply_operator(operators, values)
+        i = 0
+        while i < len(tokens):
+            token = tokens[i]
+            if token == "(":
                 operators.append(token)
+            elif token == ")":
+                while operators and operators[-1] != "(":
+                    self._apply_operator(operators, values)
+                if operators and operators[-1] == "(":
+                    operators.pop()  # Pop the "("
+                else:
+                    raise ValueError("Mismatched parentheses")
+            elif token in self.operators:
+                if token == "sqrt":  # Unary operator
+                    operators.append(token)
+                else:  # Binary operator
+                    while (
+                        operators
+                        and operators[-1] in self.operators
+                        and self.precedence.get(operators[-1], 0) >= self.precedence[token]
+                        and operators[-1] != "("
+                    ):
+                        self._apply_operator(operators, values)
+                    operators.append(token)
             else:
                 try:
                     values.append(float(token))
                 except ValueError:
                     raise ValueError(f"invalid token: {token}")
+            i += 1
 
         while operators:
+            if operators[-1] == "(":
+                raise ValueError("Mismatched parentheses")
             self._apply_operator(operators, values)
 
         if len(values) != 1:
@@ -51,9 +80,18 @@ class Calculator:
             return
 
         operator = operators.pop()
-        if len(values) < 2:
-            raise ValueError(f"not enough operands for operator {operator}")
-
-        b = values.pop()
-        a = values.pop()
-        values.append(self.operators[operator](a, b))
+        if operator == "sqrt":
+            if not values:
+                raise ValueError(f"not enough operands for operator {operator}")
+            a = values.pop()
+            if a < 0:
+                raise ValueError("Cannot calculate square root of a negative number")
+            values.append(self.operators[operator](a))
+        else:  # Binary operators
+            if len(values) < 2:
+                raise ValueError(f"not enough operands for operator {operator}")
+            b = values.pop()
+            a = values.pop()
+            if operator == "/" and b == 0:
+                raise ValueError("Division by zero")
+            values.append(self.operators[operator](a, b))
