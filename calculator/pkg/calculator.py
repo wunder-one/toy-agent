@@ -1,4 +1,5 @@
 import math
+import re
 
 class Calculator:
     def __init__(self):
@@ -26,9 +27,11 @@ class Calculator:
         return self._evaluate_infix(tokens)
 
     def _tokenize(self, expression):
-        # This simple tokenizer assumes space-separated tokens.
-        # For more robust parsing, a more sophisticated tokenizer would be needed.
-        return expression.replace('(', ' ( ').replace(')', ' ) ').split()
+        # Use a regular expression to find all numbers, operators, and parentheses
+        # This regex handles integers, floats, and all defined operators, including '**' and 'sqrt'
+        token_pattern = r"(\d+\.\d+|\d+|[+\-*/()]|\*\*|sqrt)"
+        tokens = [token for token in re.findall(token_pattern, expression) if token.strip()]
+        return tokens
 
     def _evaluate_infix(self, tokens):
         values = []
